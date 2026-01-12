@@ -1,6 +1,7 @@
 ---
 description: "Bootstraps the /llmdoc system using a SWARM of investigators to map the codebase and establish the Constitution."
 argument-hint: ""
+model: sonnet
 ---
 
 # /initDoc
@@ -21,7 +22,7 @@ argument-hint: ""
         * **💾 Investigator Gamma (Data):** `Task(agent="investigator", prompt="Search for database schemas (prisma, sql, mongoose) or core Interface definitions. Map the Data Model.")`
         * **🔌 Investigator Delta (API):** `Task(agent="investigator", prompt="Search for Controller files, API routes, or GraphQL resolvers. Identify Entry Points.")`
         * **🛠️ Investigator Epsilon (Utils):** `Task(agent="investigator", prompt="Scan 'src/utils', 'src/common', 'src/shared'. List reusable helper functions to prevent reinvention.")`
-        * **⚖️ Investigator Omega (The Lawyer):** `Task(agent="investigator", prompt="**CRITICAL MISSION:** Find the 'Implicit Constitution'. 1. Check Math libs for Coordinate System/Matrix Order. 2. Check Tests for Epsilon/Precision rules. 3. Check Linter configs for coding style. 4. Look for 'Forbidden Patterns'.")`
+        * **⚖️ Investigator Omega (The Lawyer):** `Task(agent="investigator", prompt="**CRITICAL MISSION:** Find the 'Implicit Constitution'. 1. Check Math libs for Coordinate System/Matrix Order. 2. Check Tests for Epsilon/Precision rules. 3. **Assess Style:** Look for 'Bureaucratic Naming' (e.g. AbstractManagerImpl) or Deep Nesting to assess current Style Debt.")`
 
 2.  **Await Intel:**
     * Wait for ALL 6 reports to return.
@@ -34,7 +35,7 @@ argument-hint: ""
     * **Action:** Call `Task` for each document type:
 
     * **Layer 1: The Constitution (Highest Priority)**
-        * **Cartographer Prime:** `Task(agent="cartographer", prompt="Context: [Omega Report]. Create /llmdoc/reference/constitution.md. **Define the Rules of Engagement:** Coordinate Systems, Matrix Conventions, Error Handling Standards, and Forbidden Patterns. Follow 'doc-standard' strictly.")`
+        * **Cartographer Prime:** `Task(agent="cartographer", prompt="Context: [Omega Report]. Tasks:\n1. Create /llmdoc/reference/constitution.md (Tech Rules: Matrix/Coords).\n2. **Create /llmdoc/reference/style-hemingway.md** (Style Rules: Iceberg Principle, No Fluff).\n3. Define Forbidden Patterns based on Omega's findings.")`
 
     * **Layer 2: The Territory**
         * **Cartographer A:** `Task(agent="cartographer", prompt="Context: [Infra Report]. Create /llmdoc/reference/tech-stack.md. Adhere to doc-standard.")`
@@ -45,7 +46,7 @@ argument-hint: ""
 ### Phase 3: Final Linkage (The Index)
 
 1.  **Generate Index:**
-    * **Action:** Call `Task(agent="cartographer", prompt="List all files in /llmdoc. Create a structured /llmdoc/index.md linking to them. **Highlight 'constitution.md' as the first read.**")`.
+    * **Action:** Call `Task(agent="cartographer", prompt="List all files in /llmdoc. Create a structured /llmdoc/index.md linking to them. **Highlight 'constitution.md' and 'style-hemingway.md' as the mandatory reads.**")`.
 
 2.  **Report:**
-    * Output: "🚀 **Terraforming Complete.** Map and Constitution established."
+    * Output: "🚀 **Terraforming Complete.** Map, Constitution, and Style Guide established."

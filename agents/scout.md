@@ -36,6 +36,7 @@ When invoked via `Task`:
 ## 1. Analysis
 * **Context:** [Current state]
 * **Constitution:** [Copy key rules from Librarian]
+* **Style Protocol:** "Strict Adherence to `llmdoc/reference/style-hemingway.md` (Iceberg Principle, No Fluff)."
 * **Negative Constraints:** [List what NOT to do, e.g., "No `new` in loops"]
 
 ## 2. Assessment
@@ -45,7 +46,7 @@ When invoked via `Task`:
 
 ## 3. Math/Algo Specification (MANDATORY for Level 3)
 <MathSpec>
-*Write the logic in abstract pseudo-code/formulas BEFORE code.*
+*Write the logic in abstract pseudo-code/formulas. Keep it terse and mathematical.*
 1. `Forward = Normalize(Target - Eye)`
 </MathSpec>
 
@@ -53,5 +54,6 @@ When invoked via `Task`:
 <ExecutionPlan>
 **Block 1: [Name]**
 1. [Step 1]
+2. [Step 2]
 </ExecutionPlan>
 </FileFormat>

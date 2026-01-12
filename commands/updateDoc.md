@@ -1,6 +1,7 @@
 ---
 description: "The Gardening Tool. Manually triggers the Recorder to sync /llmdoc with code reality."
 argument-hint: "[Optional: Context provided by user]"
+model: sonnet
 ---
 
 # /updateDoc
@@ -28,18 +29,20 @@ argument-hint: "[Optional: Context provided by user]"
     * If **Strategy Found**:
       > "Sync docs based on `llmdoc/agent/strategy-[topic].md` AND `git diff`. Ensure architectural decisions are reflected."
     * If **No Strategy**:
-      > "Sync docs based on `git diff` and User Input: '{{USER_INPUT}}'."
+      > "Sync docs based on `git diff` and User Input: '{{USER_INPUT}}'. Infer the intent from the code changes."
 
 2.  **Execute:**
     * **Action:** Call `Task(agent="recorder")`.
     * **Prompt:**
       > "[Instruction from above].
-      > **CRITICAL:** Read `llmdoc/guides/doc-standard.md` first.
-      > 1. Ensure all updated files have YAML Frontmatter.
-      > 2. Convert prose to Pseudocode/Types where possible.
-      > 3. **PRUNE** obsolete files."
+      > **CRITICAL PROTOCOLS:**
+      > 1. **Read Laws:** Read `llmdoc/guides/doc-standard.md` AND `llmdoc/reference/style-hemingway.md`.
+      > 2. **Format:** Ensure **YAML Frontmatter** and **Type-First** definitions are present.
+      > 3. **Style:** Apply **Hemingway Style** to docs. Be terse. No 'meta-talk' (e.g., 'This document describes...'). Just state the facts.
+      > 4. **Pruning:** If code was deleted, **DELETE** the corresponding doc sections immediately."
 
 ### Phase 3: Reporting
 
 1.  **Summarize:**
     * Report which files were updated or deleted by the Recorder.
+    * Verify that no "Wall of Text" was generated.

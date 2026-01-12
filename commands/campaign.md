@@ -1,6 +1,7 @@
 ---
 description: "Swarm Mode. Executes batched parallel missions for maximum speed."
 argument-hint: "[Multi-objective goal, e.g., 'Create 5 demos']"
+model: sonnet
 ---
 
 # /campaign
@@ -25,7 +26,7 @@ argument-hint: "[Multi-objective goal, e.g., 'Create 5 demos']"
         * `Task(agent="investigator", prompt="[Task 1] Locate files...")`
         * `Task(agent="investigator", prompt="[Task 2] Locate files...")`
         * ...
-        * **GLOBAL RULE CHECK:** `Task(agent="librarian", prompt="Scan `llmdoc/reference/` for architectural rules that apply to ALL tasks in this batch (e.g. naming conventions, base classes).")`
+        * **GLOBAL RULE CHECK:** `Task(agent="librarian", prompt="Scan `llmdoc/reference/` for: 1. Tech Rules (Graphics/Arch). 2. **Style Rules** (`style-hemingway.md`). 3. **Doc Rules** (`doc-standard.md`). Return a unified 'Rules of Engagement' for the Swarm.")`
 
 ### Phase 3: Grand Strategy (The Modular Blueprint)
 
@@ -36,7 +37,7 @@ argument-hint: "[Multi-objective goal, e.g., 'Create 5 demos']"
       >
       > **CRITICAL FORMAT:**
       > Divide the plan into **Independent Execution Blocks**.
-      > Include a shared **<Constitution>** section at the top for all Workers to follow."
+      > Include a shared **<Constitution>** and **<StyleProtocol>** section at the top for all Workers to follow (citing `style-hemingway.md`)."
 
 ### Phase 4: Gatekeeper (Mode Selection)
 
@@ -55,17 +56,17 @@ argument-hint: "[Multi-objective goal, e.g., 'Create 5 demos']"
 1.  **Execute (Dynamic Dispatch):**
     * **IF [P] Parallel Mode:**
         * **Action:** Launch multiple Worker agents **AT THE SAME TIME**.
-        * `Task(agent="worker", prompt="Execute BLOCK A. Adhere to <Constitution>.")`
-        * `Task(agent="worker", prompt="Execute BLOCK B. Adhere to <Constitution>.")`
+        * `Task(agent="worker", prompt="Execute BLOCK A. **Constraint:** Apply Hemingway Style (Terse, Early Returns). Adhere to <Constitution>.")`
+        * `Task(agent="worker", prompt="Execute BLOCK B. **Constraint:** Apply Hemingway Style (Terse, Early Returns). Adhere to <Constitution>.")`
         * ...
     * **IF [S] or [T] Mode:**
         * **Action:** Launch Worker sequentially.
 
 2.  **Mass Review (Critic):**
-    * **Action:** Call `Task(agent="critic", prompt="Review ALL files. Ensure consistency across the batch and adherence to Librarian's rules.")`.
+    * **Action:** Call `Task(agent="critic", prompt="Review ALL files. **Strict Check:** 1. **Hemingway Check** (No Verbosity/Fluff). 2. Tech Compliance. 3. Safety.")`.
     * **Loop:** If Fail -> Batch Fix -> Retry.
 
 ### Phase 6: Consolidated Archival
 
 1.  **Sync:**
-    * **Action:** `Task(agent="recorder", prompt="Update docs for all campaign features.")`
+    * **Action:** `Task(agent="recorder", prompt="Update docs for all campaign features. **Constraint:** Follow `doc-standard.md` (Frontmatter) and `style-hemingway.md` (Terse).")`

@@ -7,7 +7,7 @@ argument-hint: "[Specific, explicit code instruction]"
 
 > **SYSTEM OVERRIDE:** You are in **Direct Execution Mode**.
 > **Goal:** Execute immediately -> Verify -> Sync.
-> **Constraint:** Speed is key, but DO NOT break the build.
+> **Constraint:** Speed is key, but DO NOT compromise on Style or Safety.
 
 ## Mandatory Workflow
 
@@ -18,12 +18,22 @@ argument-hint: "[Specific, explicit code instruction]"
     * **Prompt:**
       > "[DIRECT ACTION] Context: User authorized this specific change.
       > **Instruction:** {{USER_INPUT}}
-      > **Constraint:** Execute immediately. Ensure NO placeholders. Verify after change."
+      > **Constraint:**
+      > 1. Execute immediately. Ensure NO placeholders.
+      > 2. **Hemingway Style:** Keep code terse. No deep nesting. No 'what' comments.
+      > 3. Verify after change."
 
-### Step 2: Safety Check (The Critic)
+### Step 2: Safety & Style Check (The Critic)
 
 1.  **Dispatch Critic:**
-    * **Action:** Call `Task(agent="critic", prompt="Quick review of the files modified by Worker. Strict check for: 1. Console logs. 2. Laziness (placeholders). 3. Syntax errors.")`.
+    * **Action:** Call `Task(agent="critic")`.
+    * **Prompt:**
+      > "Quick review of the files modified by Worker.
+      > **Strict Check:**
+      > 1. **Hemingway Check:** Is the code verbose? Are there useless comments? (Reject if yes).
+      > 2. **Laziness:** Any `TODO` or placeholders?
+      > 3. **Safety:** Any `console.log` or `any` types?
+      > **Action:** Pass or Fail."
     * **Decision Logic:**
         * **IF PASS:** Proceed to Step 3.
         * **IF FAIL:**
@@ -37,10 +47,10 @@ argument-hint: "[Specific, explicit code instruction]"
     * **Action:** Call `Task(agent="recorder")`.
     * **Prompt:**
       > "Sync /llmdoc based on recent changes.
-      > **Context:** This was a Direct Action (`/do`). There is NO strategy file.
-      > **Intent:** {{USER_INPUT}}.
+      > **Context:** Direct Action (`/do`).
+      > **Constraint:** Read `llmdoc/guides/doc-standard.md`. Ensure any doc updates use **Frontmatter** and **Type-First** definitions.
       > **Source:** Read `git diff`."
 
 ## Example Behavior
-* User: `/do Rename 'Login' to 'SignIn'`
+* User: `/do Refactor Login to remove nesting`
 * **You:** `Task(worker)` -> `Task(critic)` -> `Task(recorder)`
