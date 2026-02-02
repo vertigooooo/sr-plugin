@@ -2,10 +2,11 @@
   "hooks": {
     "PostToolUse": [
       {
-        "comment": "规则1: 自动瘦身检查",
+        "comment": "规则: 自动瘦身检查",
         "matcher": "tool == 'Edit' || tool == 'Write'",
         "hooks": [
           {
+            "type": "Command",
             "command": "sh hooks/post-edit-length-check.sh \"$tool_input_file_path\""
           }
         ]
@@ -13,10 +14,11 @@
     ],
     "PreToolUse": [
       {
-        "comment": "规则1: 禁止废话提交",
+        "comment": "规则: 禁止废话提交",
         "matcher": "tool == 'Bash' && tool_input.command contains 'git commit'",
         "hooks": [
           {
+            "type": "Command",
             "command": "sh hooks/pre-commit-style-check.sh"
           }
         ]
@@ -24,9 +26,10 @@
     ],
     "Stop": [
       {
-        "comment": "规则1: 会话结束提醒",
+        "comment": "规则: 会话结束提醒",
         "hooks": [
           {
+            "type": "Command",
             "command": "sh hooks/session-stop-reminder.sh"
           }
         ]
