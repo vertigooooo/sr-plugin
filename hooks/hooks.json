@@ -2,22 +2,34 @@
   "hooks": {
     "PostToolUse": [
       {
-        "comment": "Post-Edit Hook: 自动瘦身检查 (Hemingway Style)",
+        "comment": "规则1: 自动瘦身检查",
         "matcher": "tool == 'Edit' || tool == 'Write'",
-        "command": "sh hooks/post-edit-length-check.sh \"$tool_input_file_path\""
+        "hooks": [
+          {
+            "command": "sh hooks/post-edit-length-check.sh \"$tool_input_file_path\""
+          }
+        ]
       }
     ],
     "PreToolUse": [
       {
-        "comment": "Pre-Commit Hook: 禁止废话 (Meta-talk Blocker)",
+        "comment": "规则1: 禁止废话提交",
         "matcher": "tool == 'Bash' && tool_input.command contains 'git commit'",
-        "command": "sh hooks/pre-commit-style-check.sh"
+        "hooks": [
+          {
+            "command": "sh hooks/pre-commit-style-check.sh"
+          }
+        ]
       }
     ],
     "Stop": [
       {
-        "comment": "Session Stop: 提醒记录",
-        "command": "sh hooks/session-stop-reminder.sh"
+        "comment": "规则1: 会话结束提醒",
+        "hooks": [
+          {
+            "command": "sh hooks/session-stop-reminder.sh"
+          }
+        ]
       }
     ]
   }
