@@ -3,10 +3,10 @@
     "PostToolUse": [
       {
         "comment": "规则: 自动瘦身检查",
-        "matcher": "tool == 'Edit' || tool == 'Write'",
+        "matcher": "Edit|Write",
         "hooks": [
           {
-            "type": "Command",
+            "type": "command",
             "command": "sh hooks/post-edit-length-check.sh \"$tool_input_file_path\""
           }
         ]
@@ -15,11 +15,11 @@
     "PreToolUse": [
       {
         "comment": "规则: 禁止废话提交",
-        "matcher": "tool == 'Bash' && tool_input.command contains 'git commit'",
+        "matcher": "Bash",
         "hooks": [
           {
-            "type": "Command",
-            "command": "sh hooks/pre-commit-style-check.sh"
+            "type": "command",
+            "command": "if echo \"$tool_input_command\" | grep -q 'git commit'; then sh hooks/pre-commit-style-check.sh; fi"
           }
         ]
       }
@@ -29,7 +29,7 @@
         "comment": "规则: 会话结束提醒",
         "hooks": [
           {
-            "type": "Command",
+            "type": "command",
             "command": "sh hooks/session-stop-reminder.sh"
           }
         ]
