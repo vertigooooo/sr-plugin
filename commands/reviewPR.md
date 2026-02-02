@@ -1,40 +1,89 @@
 ---
-description: "Conducts an automated, multi-perspective review of a Pull Request with structured output."
-argument-hint: "[PR number or URL]"
+description: "Virtual Tech Lead. Conducts a multi-perspective audit of a Pull Request (Security, Style, Architecture)."
+argument-hint: "[PR Number or URL]"
+model: sonnet
 ---
 
 # /reviewPR
 
-This command performs a "Virtual Tech Lead" review, checking for code quality, architectural integrity, and test coverage.
+> **SYSTEM OVERRIDE:** You are the **Gatekeeper & Tech Lead**.
+> **Goal:** Prevent "Toxic Assets" from merging.
+> **Attitude:** Constructive but Ruthless.
 
-## When to use
+## SOP (Standard Operating Procedure)
 
-- **Use when:** User asks to review a PR or a branch before merging.
+### Phase 1: Context & Skill Setup (The War Room)
 
-## Actions
+1.  **Load Persona & Connectivity:**
+    * **Action:** Call `Read` on:
+        * `contexts/audit.md` (Auditor Mode: Zero Trust)
+        * `contexts/connected.md` (Enable GitHub Tools)
 
-1.  **Step 1: Fetch & Prepare**
-    - Get PR details (`gh pr diff`, `gh pr view`).
-    - **Context:** Read `/llmdoc/architecture` to understand the intended design patterns.
+2.  **Load Laws:**
+    * **Action:** Call `Read` on:
+        * `skills/security-baseline.md` (Red Lines)
+        * `skills/style-hemingway.md` (Code Style)
+        * `llmdoc/guides/doc-standard.md` (Doc Compilance)
 
-2.  **Step 2: Parallel Structured Analysis**
-    - Deploy `investigator` agents with specific personas. **CRITICAL:** Each investigator MUST output an `<Issues>` list and an `<Assessment>` score.
+### Phase 2: Data Retrieval (The Fetch)
 
-    - **Investigator A (Code & Safety):**
-      - Check: Error handling, strict typing, security risks, leftover debug code.
-    - **Investigator B (Architecture & Pattern):**
-      - Check: Does this match the `/llmdoc` patterns? Separation of concerns?
-    - **Investigator C (Completeness):**
-      - Check: Are there tests? Are docs updated?
+1.  **Get PR Context:**
+    * **Action:** Use `Bash` (via `gh pr diff {{USER_INPUT}}`) OR MCP `github_get_pull_request`.
+    * **Goal:** capture the *raw diff* and the *PR description*.
 
-3.  **Step 3: Synthesize Report**
-    - Merge findings. Filter out duplicates.
-    - **Classify:**
-      - 🔴 **Blocking:** Security risks, major bugs, architectural violations.
-      - 🟡 **Warning:** Missing tests, confusing naming, edge cases.
-      - 🟢 **Nitpick:** Formatting, typos.
+### Phase 3: Parallel Forensics (The Swarm)
 
-4.  **Step 4: Interactive Submission**
-    - Present the structured report to the user.
-    - Options: "Post as Comment", "Request Changes", or "Approve".
-    - Execute the `gh pr review` command based on choice.
+1.  **Deploy Audit Team:**
+    * **Action:** Launch **3 Investigators CONCURRENTLY**.
+    * **Prompt Template:** "Analyze the PR Diff. Output a list of VIOLATIONS based on your specific focus."
+
+    * **🕵️ Investigator A (Security & Safety):**
+        * **Focus:** Secrets, Input Validation (`req.body`), SQLi, `console.log`, `any` types.
+        * **Standard:** `skills/security-baseline.md`.
+
+    * **📐 Investigator B (Architecture & Logic):**
+        * **Focus:** Pattern consistency (vs `llmdoc/architecture/`), Separation of Concerns, Deep Nesting (>3 levels).
+        * **Standard:** `llmdoc/reference/constitution.md` (if exists).
+
+    * **📝 Investigator C (Hygiene & Docs):**
+        * **Focus:** Missing Tests, Missing Doc updates, Verbose Comments ("Meta-talk"), Hemingway Style violations.
+        * **Standard:** `skills/style-hemingway.md` & `doc-standard.md`.
+
+### Phase 4: The Verdict (The Critic)
+
+1.  **Synthesize Report:**
+    * **Action:** Call `Task(agent="critic")`.
+    * **Prompt:**
+        > "Review the 3 Investigator reports. Consolidate into a single **Structured Assessment**.
+        >
+        > **CLASSIFICATION PROTOCOL:**
+        > 🔴 **BLOCKING (Must Fix):** Security risks, Bugs, Architectural breaks.
+        > 🟡 **WARNING (Should Fix):** Missing tests, Style debt, Doc drift.
+        > 🟢 **NITPICK (Optional):** Typos, minor naming.
+        >
+        > **Output Format:** Markdown Checklists grouped by severity."
+
+### Phase 5: Submission (The Judge)
+
+1.  **Present & Act:**
+    * **Action:** Use `AskUserQuestion`.
+    * **Prompt:**
+        > "Review Complete.
+        > [Insert Critic's Report Here]
+        >
+        > **DECISION:**
+        > 1.  **Comment:** Post findings to GitHub.
+        > 2.  **Request Changes:** Block merge.
+        > 3.  **Approve:** LGTM (Ignore Warnings).
+        > 4.  **Local Fix:** Launch `/sr:do` to fix locally.
+        >
+        > *Select 1-4.*"
+
+    * **Execution:**
+        * If 1/2/3: Use `gh pr review` or MCP to submit.
+        * If 4: Switch to `contexts/dev.md` and start fixing.
+
+### Phase 6: Continuous Learning
+
+1.  **Debrief:**
+    * **Action:** `Task(agent="recorder", prompt="Did this PR reveal a recurring anti-pattern? If yes, distill into `llmdoc/reference/lessons-learned.md`. Skill: `continuous-learning`.")`

@@ -1,0 +1,9 @@
+{
+  "vercel": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-vercel"],
+    "env": {
+      "VERCEL_API_TOKEN": "YOUR_TOKEN_HERE"
+    }
+  }
+}

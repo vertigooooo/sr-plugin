@@ -1,35 +1,44 @@
 ---
-description: "Updates the project's 'Lessons Learned' database. Filters insights through Hemingway Style."
-argument-hint: "[The lesson or insight]"
+description: "Manually injects an insight into the Institutional Memory. Polishes raw thought into a Hemingway Rule."
+argument-hint: "[Raw insight or lesson]"
 model: sonnet
 ---
 
 # /memo
 
-> **Goal:** Institutional Memory (High Signal, Low Noise).
-> **File:** `/llmdoc/reference/lessons-learned.md`
+> **SYSTEM OVERRIDE:** You are the **Archivist**.
+> **Goal:** Convert raw User Input into a high-signal Asset.
+> **Target:** `llmdoc/reference/lessons-learned.md`
 
-## SOP
+## SOP (Standard Operating Procedure)
 
-### Step 1: Ingest & Distill
+### Phase 1: Skill Injection (The Filter)
 
-1.  **Analyze User Input:**
-    * *Input:* "{{USER_INPUT}}"
-    * *Goal:* Extract the core technical truth.
+1.  **Load Style Law:**
+    * **Action:** Call `Read("skills/style-hemingway.md")`.
+    * **Constraint:** The output must strictly adhere to the **Iceberg Principle** (Fact only, no emotion, no "I think").
 
-2.  **Archive (The Recorder):**
+### Phase 2: Distill & Archive
+
+1.  **Analyze & Rewrite:**
+    * **Input:** `{{USER_INPUT}}`
+    * **Internal Thought:** "How do I rewrite this to be a universal rule?"
+        * *Raw:* "I realized that using map implies iteration order but that's not guaranteed in all JS engines."
+        * *Polished:* "**[JS] Map Iteration:** Do not rely on insertion order for logic; use Arrays if order matters."
+
+2.  **Dispatch Recorder:**
     * **Action:** Call `Task(agent="recorder")`.
     * **Prompt:**
-        > "Append this insight to `/llmdoc/reference/lessons-learned.md`.
-        >
-        > **CRITICAL CONSTRAINTS:**
-        > 1.  **Doc Standard:** Ensure the file exists with valid **Frontmatter** (`id: lessons-learned`, `type: reference`).
-        > 2.  **Hemingway Filter:** **REWRITE** the user's input to be terse, imperative, and factual. Remove 'I think', 'maybe', or generic fluff.
-        >     * *Bad:* 'I tried using X but it failed so maybe we should avoid it.'
-        >     * *Good:* 'Avoid X; causes instability in Context Providers.'
-        > 3.  **Format:** `- **[YYYY-MM-DD] [Topic]:** [Terse Insight]`"
+      > "Append this polished rule to `llmdoc/reference/lessons-learned.md`.
+      >
+      > **Rule Content:** [Insert Polished Rule]
+      >
+      > **CRITICAL PROTOCOLS:**
+      > 1. **Check Existence:** If file is missing, create it with Frontmatter (`id: lessons-learned`).
+      > 2. **Format:** Use the standard pattern: `- **[YYYY-MM-DD] [Topic]:** [Rule Content]`
+      > 3. **Skill:** Maintain `style-hemingway` tone."
 
-### Step 2: Indexing Confirmation
+### Phase 3: Confirmation
 
 1.  **Feedback:**
-    * Output: "📝 **Memo Saved.** Insight distilled and archived."
+    * Output: "📝 **Archived.** Added to Collective Memory."

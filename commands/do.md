@@ -1,56 +1,67 @@
 ---
-description: "Direct Action Mode: Bypasses deep investigation but maintains quality control via Critic."
-argument-hint: "[Specific, explicit code instruction]"
+description: "Direct Action Mode. Executes atomic tasks by mounting 'Hemingway' and 'Security' skills."
+argument-hint: "[Specific code instruction]"
+model: sonnet
 ---
 
-# /do
+# /sr:do
 
 > **SYSTEM OVERRIDE:** You are in **Direct Execution Mode**.
-> **Goal:** Execute immediately -> Verify -> Sync.
-> **Constraint:** Speed is key, but DO NOT compromise on Style or Safety.
+> **Goal:** Execute -> Verify -> Sync.
+> **Constraint:** Speed is key, but **SKILL COMPLIANCE** is mandatory.
 
-## Mandatory Workflow
+## SOP (Standard Operating Procedure)
 
-### Step 1: Execute (The Strike)
+### Phase 1: Context & Skill Injection (Equip)
+
+1.  **Adopt Persona:**
+    * **Action:** Call `Read("contexts/dev.md")`.
+    * **Goal:** Enter "Flow State" (Builder Mode).
+
+2.  **Load Skills:**
+    * **Action:** Call `Read` on:
+        * `skills/style-hemingway.md` (The Style Law)
+        * `skills/security-baseline.md` (The Red Lines)
+
+### Phase 2: Execute (The Strike)
 
 1.  **Dispatch Worker:**
-    * You **MUST** use the `Task` tool to launch the `worker` agent.
+    * **Action:** Call `Task(agent="worker")`.
     * **Prompt:**
-      > "[DIRECT ACTION] Context: User authorized this specific change.
+      > "[DIRECT ACTION] Context: User authorized this change.
       > **Instruction:** {{USER_INPUT}}
-      > **Constraint:**
-      > 1. Execute immediately. Ensure NO placeholders.
-      > 2. **Hemingway Style:** Keep code terse. No deep nesting. No 'what' comments.
-      > 3. Verify after change."
-
-### Step 2: Safety & Style Check (The Critic)
+      > **MANDATORY SKILLS:**
+      > 1. **Apply `style-hemingway`:** Terse code, no fluff.
+      > 2. **Apply `security-baseline`:** Zero Trust.
+      > **Action:** Execute immediately."
+      
+### Phase 3: Safety & Style Check (The Critic)
 
 1.  **Dispatch Critic:**
     * **Action:** Call `Task(agent="critic")`.
     * **Prompt:**
-      > "Quick review of the files modified by Worker.
-      > **Strict Check:**
-      > 1. **Hemingway Check:** Is the code verbose? Are there useless comments? (Reject if yes).
-      > 2. **Laziness:** Any `TODO` or placeholders?
-      > 3. **Safety:** Any `console.log` or `any` types?
+      > "Quick review of changes made by Worker.
+      > **Reference Standards:** Check against the loaded `style-hemingway.md` and `security-baseline.md`.
+      >
+      > **Strict Audit:**
+      > 1. **Hemingway Fail?** (Verbose? Nested loops? Fluff comments?)
+      > 2. **Security Fail?** (Secrets? Any type? Console.log?)
+      > 3. **Laziness?** (TODOs?)
+      >
       > **Action:** Pass or Fail."
     * **Decision Logic:**
-        * **IF PASS:** Proceed to Step 3.
+        * **IF PASS:** Proceed to Phase 4.
         * **IF FAIL:**
-            * **Action:** Call `Task(agent="worker", prompt="Fix issues reported by Critic: [Insert Report].")`.
-            * *Note:* Allow max 1 retry loop for speed. If still failing, stop and report to user.
+            * **Action:** Call `Task(agent="worker", prompt="Fix violations reported by Critic: [Insert Report]. Constraint: Adhere strictly to Hemingway Style.")`.
+            * *Loop:* Allow max 1 retry.
 
-### Step 3: Auto-Sync (The Recorder)
+### Phase 4: Auto-Sync (The Recorder)
 
 1.  **Dispatch Recorder:**
-    * **Condition:** Only if Step 2 PASSED.
+    * **Condition:** Only if Phase 3 PASSED.
     * **Action:** Call `Task(agent="recorder")`.
     * **Prompt:**
       > "Sync /llmdoc based on recent changes.
-      > **Context:** Direct Action (`/do`).
-      > **Constraint:** Read `llmdoc/guides/doc-standard.md`. Ensure any doc updates use **Frontmatter** and **Type-First** definitions.
+      > **Skill:** Apply `style-hemingway` to the docs (No meta-talk, use bullet points).
+      > **Standard:** Follow `llmdoc/guides/doc-standard.md` (Frontmatter is Law).
       > **Source:** Read `git diff`."
-
-## Example Behavior
-* User: `/do Refactor Login to remove nesting`
-* **You:** `Task(worker)` -> `Task(critic)` -> `Task(recorder)`
